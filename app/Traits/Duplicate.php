@@ -17,7 +17,7 @@ trait Duplicate
 
     public function cekDuplicate($query)
     {
-        $result = $this->client->request('POST', $this->endpoint . '/content/metadata/search', [
+        $result = $this->client->request('POST', $this->endpoint . 'content/metadata/search', [
             'form_params' => [
                 'query' => urlencode($query)
             ]
@@ -38,7 +38,7 @@ trait Duplicate
     }
 
     private function get_videos($id) {
-        $result = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $result = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
 
         if($result->getStatusCode() != 200) {
             if($result->getStatusCode() != 200) {

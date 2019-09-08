@@ -24,7 +24,7 @@ class commentController extends Controller
 
     public function index($id)
     {
-        $result = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $result = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
         if($result->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -47,7 +47,7 @@ class commentController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $comments = $this->client->request('GET', $this->endpoint . "/content/metadata/$metadata_id");
+        $comments = $this->client->request('GET', $this->endpoint . "content/metadata/$metadata_id");
         if($comments->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -67,7 +67,7 @@ class commentController extends Controller
             'updated_at' => date(DATE_ATOM)
         ]);
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$metadata_id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$metadata_id", [
             'form_params' => [
                 'comments' => array_merge($comments, $comment)
             ]
@@ -104,7 +104,7 @@ class commentController extends Controller
         $this->validate($request, $rules, $message);
 
         $metadata = $request->metadata_id;
-        $comments = $this->client->request('GET', $this->endpoint . "/content/metadata/$metadata");
+        $comments = $this->client->request('GET', $this->endpoint . "content/metadata/$metadata");
         if($comments->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -143,7 +143,7 @@ class commentController extends Controller
             'updated_at' => date(DATE_ATOM)
         ];
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
                 'comments' => array_merge($comments, $comment)
             ]
@@ -180,7 +180,7 @@ class commentController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $comments = $this->client->request('GET', $this->endpoint . "/content/metadata/$request->metadata_id");
+        $comments = $this->client->request('GET', $this->endpoint . "content/metadata/$request->metadata_id");
         if($comments->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -208,7 +208,7 @@ class commentController extends Controller
             ]);
         }
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
                 'comments' => $comments
             ]

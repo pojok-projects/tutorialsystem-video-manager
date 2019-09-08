@@ -35,7 +35,7 @@ class reactController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $likes = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $likes = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
         if($likes->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -48,7 +48,7 @@ class reactController extends Controller
         foreach($likes as $l) {
             if($l['user_id'] == $request->user_id) {
                 unset($likes[$i]);
-                $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+                $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$id", [
                     'form_params' => [
                         'likes' => $likes
                     ]
@@ -76,7 +76,7 @@ class reactController extends Controller
                     'updated_at' => date(DATE_ATOM)
                 ]);
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$id", [
             'form_params' => [
                 'likes' => array_merge($likes, $like)
             ]
@@ -108,7 +108,7 @@ class reactController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $dislikes = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $dislikes = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
         if($dislikes->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -121,7 +121,7 @@ class reactController extends Controller
         foreach($dislikes as $l) {
             if($l['user_id'] == $request->user_id) {
                 unset($dislikes[$i]);
-                $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+                $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$id", [
                     'form_params' => [
                         'dislikes' => array_merge($dislikes, [])
                     ]
@@ -149,7 +149,7 @@ class reactController extends Controller
                     'updated_at' => date(DATE_ATOM)
                 ]);
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$id", [
             'form_params' => [
                 'dislikes' => array_merge($dislikes, $dislike)
             ]

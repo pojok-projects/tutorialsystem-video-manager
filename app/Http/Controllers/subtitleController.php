@@ -24,7 +24,7 @@ class subtitleController extends Controller
 
     public function index($id)
     {
-        $result = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $result = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
         if($result->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -47,7 +47,7 @@ class subtitleController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $subtitle = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $subtitle = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
         if($subtitle->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -80,7 +80,7 @@ class subtitleController extends Controller
         }
         
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$id", [
             'form_params' => [
                 'subtitle' => array_merge($subtitle, $sub)
             ]
@@ -119,7 +119,7 @@ class subtitleController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $subtitle = $this->client->request('GET', $this->endpoint . "/content/metadata/$request->metadata_id");
+        $subtitle = $this->client->request('GET', $this->endpoint . "content/metadata/$request->metadata_id");
         if($subtitle->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -168,7 +168,7 @@ class subtitleController extends Controller
             'updated_at' => date(DATE_ATOM)
         ];
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
                 'subtitle' => array_merge($subtitle, $sub)
             ]
@@ -203,7 +203,7 @@ class subtitleController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $subtitle = $this->client->request('GET', $this->endpoint . "/content/metadata/$request->metadata_id");
+        $subtitle = $this->client->request('GET', $this->endpoint . "content/metadata/$request->metadata_id");
         if($subtitle->getStatusCode() != 200) {
             return response()->json([
                 'Message' => 'Bad Gateway'
@@ -231,7 +231,7 @@ class subtitleController extends Controller
             ]);
         }
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
                 'subtitle' => $subtitle
             ]

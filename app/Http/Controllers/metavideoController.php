@@ -22,7 +22,7 @@ class metavideoController extends Controller
     }
 
     private function get_videos($id) {
-        $result = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        $result = $this->client->request('GET', $this->endpoint . "content/metadata/$id");
 
         if($result->getStatusCode() != 200) {
             return response()->json([
@@ -73,7 +73,7 @@ class metavideoController extends Controller
         $videos = $this->get_videos($id);
         $result = array_merge($videos, $video);
         
-        $data = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+        $data = $this->client->request('POST', $this->endpoint . "content/metadata/update/$id", [
             'form_params' => [
                 'metavideos' => $result
             ]
@@ -149,7 +149,7 @@ class metavideoController extends Controller
             'resolution' => $resolution
         ];
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->id", [
             'form_params' => [
                 'metavideos' => array_merge($videos, $video)
             ]
@@ -205,7 +205,7 @@ class metavideoController extends Controller
             ]);
         }
 
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->id", [
             'form_params' => [
                 'metavideos' => $videos
             ]
