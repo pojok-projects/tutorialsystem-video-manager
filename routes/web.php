@@ -16,7 +16,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->group(['prefix' => '/v1/metadata'], function () use($router) {
+$router->group(['prefix' => '/vidm/v1/metadata'], function () use($router) {
     $router->get('/', 'metadataController@index');
     $router->get('/{id}', 'metadataController@index');
     $router->post('/store', 'metadataController@store');
@@ -31,21 +31,21 @@ $router->group(['prefix' => '/v1/metadata'], function () use($router) {
     $router->post('/dislike/{id}', 'reactController@dislike');
 });
 
-$router->group(['prefix' => '/v1/metavideos'], function () use($router) {
+$router->group(['prefix' => '/vidm/v1/metavideos'], function () use($router) {
     $router->get('/{id}', 'metavideoController@index');
     $router->post('/store/{id}', 'metavideoController@create');
     $router->post('/update', 'metavideoController@update');
     $router->post('/delete', 'metavideoController@destroy');
 });
 
-$router->group(['prefix' => '/v1/metadata/sub'], function () use($router) {
+$router->group(['prefix' => '/vidm/v1/metadata/sub'], function () use($router) {
     $router->get('/{id}', 'subtitleController@index');
     $router->post('/store/{id}', 'subtitleController@create');
     $router->post('/update', 'subtitleController@update');
     $router->post('/delete', 'subtitleController@destroy');
 });
 
-$router->group(['prefix' => '/v1/metadata/comment'], function () use($router) {
+$router->group(['prefix' => '/vidm/v1/metadata/comment'], function () use($router) {
     $router->get('/{id}', 'commentController@index');
     $router->post('/add/{id}', 'commentController@create');
     $router->post('/update', 'commentController@update');
