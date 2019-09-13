@@ -1,100 +1,62 @@
 FORMAT: 1A
-HOST: https://api.tutorialinaja.tech/vidm/v1/
+HOST: http://polls.apiblueprint.org/
 
-# Tutorialinaja - Video Manager
+# Video Manager
 
 DOCS Video Manager Api
 
-## API Host
-* HOST: https://api.tutorialinaja.tech
-
 ##Api Version
-* /v1
+* /vidm/v1
 
-## API Main End Point
-* https://api.tutorialinaja.tech/vidm/v1/
 
-## Metadata Content [/metadata]
+## Metadata Content [/metavideos]
 
 
 ___
 **Table Routes:**
 | URL                                       | Method | INFO                            |
 | ----------------------------------------- | ------ | --------------------------------|
-| `/metadata`                               | GET    | Get All Data                    |
-| `/metadata/store`                         | POST   | Save Data                       |
-| `/metadata/{id}`                          | GET    | Get Data by ID                  |
-| `/metadata/search`                        | POST   | Search Data Query               |
-| `/metadata/update/{id}`                   | POST   | Update Data by ID               |
-| `/metadata/delete/{id}`                   | POST   | Delete Data by ID               |
-| `/metadata/download/{id}`                 | GET    | Increase The Number Of Download |
-| `/metadata/save/{id}`                     | GET    | Increase The Number Of Saves    |
-| `/metadata/share/{id}`                    | GET    | Increase The Number Of Shares   |
-| `/metadata/like/{id}`                     | POST   | like/unlike                     |
-| `/metadata/dislike/{id}`                  | GET    | like/undislike                  |
+| `/metavideos/{id}`                        | GET    | Get Videos By Metadata Id       |
+| `/metavideos/store/{id}`                  | POST   | Save Videos By Metadata Id      |
+| `/metavideos/update/`                     | POST   | Update Videos                   |
+| `/metavideos/delete`                      | POST   | Delete Videos                   |
 
 ___
-**Metadata Content:**
-| Parameter                 | Description                         |
-| ---------                 | ------------                        |
-| `user_id`                 | `Id Of User`                        |
-| `video_title`             | `Title Of Video`                    |
-| `video_description`       | `Description Of Video`              |
-| `video_genre`             | `Genre Of Video`                    |
-| `privacy`                 | `Privacy of Video (public/private)` |
+**Save Videos Parameter:**
+| Parameter    | type   | Status   | Description           |
+| ------------ | ------ | -------- | --------------------- |
+| `file_name`  | string | required | File Name of Video    |
+| `file_path`  | string | required | File Path of Video    |
+| `format`     | string | required | Format of Video       |
+| `resolution` | string | required | Resolution of Video   |
+| `size`       | int    | required | Size of Video  [using bytes](https://convertlive.com/u/convert/megabytes/to/bytes#100) |
+| `duration`   | int    | required | Duration of Video [using seconds](https://convertlive.com/c/convert/time) |
+
+___
+**Update Videos Parameter:**
+| Parameter     | type   | Status   | Description           |
+| ------------  | ------ | -------- | --------------------- |
+| `metadata_id` | string | required | id of metadata        |
+| `metavideo_id`| string | required | id of video           |
+| `file_path`   | string | optimal  | File Path of Video    |
+| `format`      | string | optimal  | Format of Video       |
+| `resolution`  | string | optimal  | Resolution of Video   |
+| `size`        | int    | optimal  | Size of Video  [using bytes](https://convertlive.com/u/convert/megabytes/to/bytes#100) |
+| `duration`    | int    | optimal  | Duration of Video [using seconds](https://convertlive.com/c/convert/time) |
+
+___
+***Delete Videos Parameter:**
+| Parameter     | type   | Status   | Description           |
+| ------------  | ------ | -------- | --------------------- |
+| `metadata_id` | string | required | id of metadata        |
+| `metavideo_id`| string | required | id of video           |
 
 
-### Get All Metadata [GET /metadata]
-
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "code": "200",
-                "message": "index list query has been performed, data has been found",
-                "total": 1
-            },
-            "result": [
-                {
-                    "metavideos": [
-                        {
-                            "duration": 30,
-                            "file_path": "/videos/1080p/tutorial-node-js-bagian-1.mp4",
-                            "size": 104857600,
-                            "updated_at": "2019-08-24T22:28:16+07:00",
-                            "file_name": "tutorial-node-js-bagian-1.mp4",
-                            "format": "mp4",
-                            "created_at": "2019-08-24T22:28:16+07:00",
-                            "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-                            "resolution": "1080p"
-                        }
-                    ],
-                    "comments": null,
-                    "privacy": "public",
-                    "created_at": "2019-08-24T22:34:32+07:00",
-                    "video_share": null,
-                    "dislikes": null,
-                    "video_downloads": null,
-                    "video_description": "Tutorial Dasar NodeJs",
-                    "category_id": "2f0a68a1-115d-4c24-9173-404638a1fc27",
-                    "video_title": "Tutorial NodeJs - Bagian 1",
-                    "updated_at": "2019-08-24T22:34:32+07:00",
-                    "user_id": "91fa1120-17d4-442b-8338-aa3ab7bbc14e",
-                    "subtitle": null,
-                    "video_genre": "Tutorial",
-                    "id": "56b140a1-16a7-4fbb-b852-7365fbff7112",
-                    "video_saves": null,
-                    "video_viewers": null,
-                    "likes": null
-                }
-            ]
-        }
-
-### Get Metadata By ID [GET /metadata/{id}]
+### Get Videos By metadata id [GET /metavideos/{id}]
 
 + Parameter
     + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-
+    
 + Response 200 (application/json)
 
         {
@@ -110,259 +72,10 @@ ___
                     "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
                     "resolution": "1080p"
                 }
-            ],
-            "comments": null,
-            "privacy": "public",
-            "created_at": "2019-08-24T22:34:32+07:00",
-            "video_share": null,
-            "dislikes": null,
-            "video_downloads": null,
-            "video_description": "Tutorial Dasar NodeJs",
-            "category_id": "2f0a68a1-115d-4c24-9173-404638a1fc27",
-            "video_title": "Tutorial NodeJs - Bagian 1",
-            "updated_at": "2019-08-24T22:34:32+07:00",
-            "user_id": "91fa1120-17d4-442b-8338-aa3ab7bbc14e",
-            "subtitle": null,
-            "video_genre": "Tutorial",
-            "id": "56b140a1-16a7-4fbb-b852-7365fbff7112",
-            "video_saves": null,
-            "video_viewers": null,
-            "likes": null
-        }
-        
-### Save Metadata [POST /metadata/store]
-
-+ Request (application/json)
-
-        {
-            "user_id": "91fa1120-17d4-442b-8338-aa3ab7bbc14e",
-            "video_title": "Tutorial NodeJs - Bagian 1",
-            "video_description": "Tutorial Dasar NodeJs",
-            "video_genre": "Tutorial",
-            "privacy": "public"
-        }
-
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "code": "200",
-                "message": "data has been saved"
-            },
-            "result": {
-                "id": "56b140a1-16a7-4fbb-b852-7365fbff7112"
-            }
-        }
-        
-### Update Metadata By ID [POST /metadata/update/{id}]
-
-**Important:**
-    All Parameter Update is Optimal
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-    
-+ Request (application/json)
-
-        {
-            "video_title" : "Tutorial Dasar Lumen",
-            "video_genre" : "Programming"
-        }
-        
-+ Response 200 (application/json)
-
-
-        {
-            "status": {
-                "code": "200",
-                "message": "data has been updated"
-            },
-            "result": {
-                "id": "56b140a1-16a7-4fbb-b852-7365fbff7112"
-            }
-        }
-        
-
-
-### Delete Metadata By ID [GET /metadata/delete/{id}]
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "code": "200",
-                "message": "data has been deleted"
-            },
-            "result": {
-                "id": "56b140a1-16a7-4fbb-b852-7365fbff7112"
-            }
-        }
-        
-### Search Metadata [POST /metadata/search]
-**Request Tables:**
-| parameter | type     | Description      |
-|-----------|----------|------------------|
-| `title`   | `string` | `Title Of Video` |
-| `genre`   | `string` | `Genre Of Video` |
-
-**Important:**
-    You Can Use Multi Query
-    
-+ Request (application/json)
-
-        {
-            "video_title" : "Tutorial Dasar Lumen",
-            "video_genre" : "Programming"
-        }
-        
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "code": "200",
-                "message": "search query has been performed, data has been found",
-                "total": 1
-            },
-            "result": [
-                {
-                    "metavideos": [
-                        {
-                            "duration": 30,
-                            "file_path": "/videos/1080p/tutorial-node-js-bagian-1.mp4",
-                            "size": 104857600,
-                            "updated_at": "2019-08-24T22:28:16+07:00",
-                            "file_name": "tutorial-node-js-bagian-1.mp4",
-                            "format": "mp4",
-                            "created_at": "2019-08-24T22:28:16+07:00",
-                            "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-                            "resolution": "1080p"
-                        }
-                    ],
-                    "comments": null,
-                    "privacy": "public",
-                    "created_at": "2019-08-24T22:34:32+07:00",
-                    "video_share": null,
-                    "dislikes": null,
-                    "video_downloads": null,
-                    "video_description": "Tutorial Dasar NodeJs",
-                    "category_id": "2f0a68a1-115d-4c24-9173-404638a1fc27",
-                    "video_title": "Tutorial NodeJs - Bagian 1",
-                    "updated_at": "2019-08-24T22:34:32+07:00",
-                    "user_id": "91fa1120-17d4-442b-8338-aa3ab7bbc14e",
-                    "subtitle": null,
-                    "video_genre": "Tutorial",
-                    "id": "56b140a1-16a7-4fbb-b852-7365fbff7112",
-                    "video_saves": null,
-                    "video_viewers": null,
-                    "likes": null
-                }
             ]
         }
-    
-### Increase The Number Of Download[GET /metadata/download/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-    
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "message": "Download Updated",
-                "total": 45
-            }
-        }
-
-### Increase The Number Of Shares[GET /metadata/share/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-    
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "message": "Shares Updated",
-                "total": 48
-            }
-        }
         
-### Increase The Number Of Saves[GET /metadata/save/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-    
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "message": "Saves Updated",
-                "total": 12
-            }
-        }
-        
-### Increase The Number Of Views[GET /metadata/view/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-    
-+ Response 200 (application/json)
-
-        {
-            "status": {
-                "message": "Views Updated",
-                "total": 128
-            }
-        }
-        
-
-## Metavideos Content [/metavideos]
-
-
-___
-**Table Routes:**
-
-| URL                      | METHOD | INFO                                 |
-|--------------------------|--------|------|-------------------------------|
-| `/metavideos/{id}`       | `GET`  | `Get Metadata videos By Metadata ID` |
-| `/metavideos/store/{id}` | `POST` | `Save Metavideos By Metadata ID`     |
-| `/metavideos/update`     | `POST` | `Update Metadata Videos`             |
-| `/metavideos/delete`     | `POST` | `Delete Metadata Videos`             |
-
-___
-**Metavideos Params:**
-| PARAMETER    | STATUS     | DESCRIPTION                   |
-|--------------|-------------------------------|
-| `file_name`  | `Name Of Video File`          |
-| `duration`   | `duration Of Video(second)`   |
-| `file_path`  | `path Of Video File(bytes)`   |
-| `Size`       | `Size Of Video`               |
-| `format`     | `format Of Video`             |
-| `resolution` | `resolution Of Video`         |
-| `id`         | `id of metavideos`            |
-
-### Get Metavideos By Metadata ID [GET /metavideos/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-
-+ Response 200 (application/json)
-
-        {
-            "duration": 30,
-            "file_path": "/videos/1080p/tutorial-node-js-bagian-1.mp4",
-            "size": 104857600,
-            "updated_at": "2019-08-24T22:28:16+07:00",
-            "file_name": "tutorial-node-js-bagian-1.mp4",
-            "format": "mp4",
-            "created_at": "2019-08-24T22:28:16+07:00",
-            "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-            "resolution": "1080p"
-        }
-        
-### Save Metavideos By metadata ID [POST /metavideos/store/{id}]
+### Save Videos By Metadata Id [POST /metavideos/store/{id}]
 
 + Parameter
     + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
@@ -370,141 +83,36 @@ ___
 + Request (application/json)
 
         {
-            "file_name" : "Tutorial Dasar Lumen.mp4",
-            "duration" : "120",
-            "file_path" : "/videos/1080p/tutorial-node-js-bagian-1.mp4s",
-            "size" : 1289643,
-            "format" : "mkv",
+            "file_name" : "Tutorial Node Js.mp4",
+            "duration" : 360,
+            "file_path" : "data/videos/Tutorial Node Js.mp4",
+            "size" : 3000000,
+            "format" : "mp4",
             "resolution" : "1080p"
         }
-
+        
 + Response 200 (application/json)
 
         {
             "status" : {
                 "code" : 200,
-                "message" : "Upload Success"
+                "message" : "upload Succes"
             },
             "result" : {
-                "video_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c"
+                "video_id" : "fjalku84tui40t5439f"
             }
-            
         }
         
-### Update Metavideos By metadata ID [POST /metavideos/update]
-
+### Update Videos [POST /metavideos/update]
 
 + Request (application/json)
 
         {
-            "id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
             "metadata_id" : "56b140a1-16a7-4fbb-b852-7365fbff7112",
-            "file_name" : "tutorial-node-js-bagian-1.mp4,
-            "file_path" : "/videos/1080p/tutorial-node-js-bagian-1.mp4",
-            "duration" : "120",
-            "file_path" : "/data/videos",
-            "size" : 1289643,
-            "format" : "mkv",
-            "resolution" : "1080p"
-        }
-
-+ Response 200 (application/json)
-
-        {
-            "status" : {
-                "code" : 200,
-                "message" : "Update Success"
-            },
-            "result" : {
-                "duration": 30,
-                "file_path": "/videos/1080p/tutorial-node-js-bagian-1.mp4",
-                "size": 104857600,
-                "updated_at": "2019-08-24T22:28:16+07:00",
-                "file_name": "tutorial-node-js-bagian-1.mp4",
-                "format": "mkv",
-                "created_at": "2019-08-24T22:28:16+07:00",
-                "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-                "resolution": "1080p"
-            }   
-        }
-        
-### Delete Metavideos By metadata ID [POST /metavideos/delete]
-
-+ Request (application/json)
-
-        {
-            "id" : "Tutorial Dasar Lumen",
-            "metavideo_id" : "Programming"
-        }
-
-+ Response 200 (application/json)
-
-        {
-            "status" : {
-                "code" : 200,
-                "message" : "Update Success"
-            },
-            "result" : {
-                "duration": 30,
-                "file_path": "/videos/1080p/tutorial-node-js-bagian-1.mp4",
-                "size": 104857600,
-                "updated_at": "2019-08-24T22:28:16+07:00",
-                "file_name": "tutorial-node-js-bagian-1.mp4",
-                "format": "mp4",
-                "created_at": "2019-08-24T22:28:16+07:00",
-                "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-                "resolution": "1080p"
-            }   
-        }
-        
-
-## Subtitle Content [/metadata/sub]
-
-___
-**Table Routes:**
-
-| URL                        | METHOD | INFO                                 |
-|----------------------------|--------|--------------------------------------|
-| `/metadata/sub/{id}`       | `GET`  | `Get Subtitle videos By Metadata ID` |
-| `/metadata/sub/store/{id}` | `POST` | `Save Subtitle By Metadata ID`       |
-| `/metadata/sub/update`     | `POST` | `Update Subtitle Videos`             |
-| `/metadata/sub/delete`     | `POST` | `Delete Subtitle Videos`             |
-
-___
-**Subtitle Params:**
-| PARAMETER             | DESCRIPTION                   |
-|-----------------------|-------------------------------|
-| `file_path`           | `path of subtitle file`       |
-| `subtitle_category`   | `category of subtitle`        |
-| `id`                  | `id of comment`               |
-
-
-### Get Subtitle By Metadata ID [GET /metadata/sub/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-
-+ Response 200 (application/json)
-
-        {
-            "id" : "54lkjfalidpas-fjtgelf-poew",
-            "subtitle_category" : "English",
-            "file_path" : "/data/subtitle/english.sbt",
-            "created_at" : "2019-08-24T22:28:16+07:00",
-            "updated_at" : "2019-08-24T22:28:16+07:00"
-        }
-        
-
-### Save Subtitle By Metadata ID [POST /metadata/sub/store/{id}]
-        
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
- 
-+ Request (application/json)
-
-        {
-            "subtitle_category_id" : "1chgfaur098",
-            "file_path" : "/data/subtitle/"
+            "metavideos_id" : "jkefjiet904r45",
+            "file_name" : "Tutorial React Js.mp4",
+            "duration" : 360,
+            "file_path" : "data/videos/Tutorial React Js.mp4",
         }
         
 + Response 200 (application/json)
@@ -512,107 +120,17 @@ ___
         {
             "status" : {
                 "code" : 200,
-                "message" : "Subtitle Created"
-            },
-            "result" : {
-                "subtitle_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c"
-            }   
-        }
-        
-### Update Subtitle [POST /metadata/sub/update]
-
-+ Request (application/json)
-
-        {
-            "id" : "1chgfaur098",
-            "metadata_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-            "file_path" : "/data/subtitle/indonesian"
-        }
-        
-+ Response 200 (application/json)
-
-        {
-            "status" : {
-                "code" : 200,
-                "message" : "Subtitle Updated"
-            },
-            "result" : {
-                "id" : "1chgfaur098",
-                "file_path" : "/data/subtitle/indonesian",
-                "subtitle_category" : "English",
-                "file_path" : "/data/subtitle/english.sbt",
-                "created_at" : "2019-08-24T22:28:16+07:00",
-                "updated_at" : "2019-08-24T22:28:16+07:00",
-                
-            }   
-        }
-        
-### Delete Subtitle [POST /metadata/sub/delete]
-
-+ Request (application/json)
-
-        {
-            "id" : "1chgfaur098",
-            "metadata_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c"
-        }
-        
-+ Response 200 (application/json)
-
-        {
-            "status" : {
-                "code" : 200,
-                "message" : "Subtitle Deleted"
+                "message" : "update success"
             }
-            
-## Comment Content [/metadata/comment]
-
-___
-**Table Routes:**
-
-| URL                            | METHOD | INFO                                 |
-|--------------------------------|--------|--------------------------------------|
-| `/metadata/comment/{id}`       | `GET`  | `Get Comment video By Metadata ID`   |
-| `/metadata/comment/add/{id}`   | `POST` | `Save Comment By Metadata ID`        |
-| `/metadata/comment/update`     | `POST` | `Update Comment Videos`              |
-| `/metadata/comment/delete`     | `POST` | `Delete Comment Videos`              |
-
-___
-**Subtitle Params:**
-| PARAMETER             | DESCRIPTION                   |
-|-----------------------|-------------------------------|
-| `user_id`             | `user id`                     |
-| `message`             | `message of subtitle`         |
-| `metadata_id`         | `id of metadata`              |
-| `id`                  | `id of comment`               |
-
-
-### Get Comments By Metadata ID [GET /metadata/comment/{id}]
-
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
-
-+ Response 200 (application/json)
-
-        {
-            "id" : "54lkjfalidpas-fjtgelf-poew",
-            "user_id" : "ger648fajgkaie",
-            "reply_id" : null,
-            "message" : "your videos is the best",
-            "created_at" : "2019-08-24T22:28:16+07:00",
-            "updated_at" : "2019-08-24T22:28:16+07:00"
         }
         
+### Delete Videos [POST /metavideos/delete]
 
-### Save Comment By Metadata ID [POST /metadata/sub/add/{id}]
-        
-+ Parameter
-    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
- 
 + Request (application/json)
 
         {
-            "user_id" : "1chgfaur098",
-            "message" : "still waiting for next video"
+            "metadata_id" : "56b140a1-16a7-4fbb-b852-7365fbff7112",
+            "metavideos_id" : "jkefjiet904r45"
         }
         
 + Response 200 (application/json)
@@ -620,62 +138,6 @@ ___
         {
             "status" : {
                 "code" : 200,
-                "message" : "Comment Created"
-            },
-            "result" : {
-                "comment_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c"
-            }   
-        }
-        
-### Update Comment [POST /metadata/comment/update]
-
-+ Request (application/json)
-
-        {
-            "id" : "1chgfaur098",
-            "metadata_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
-            "message" : "i want more videos"
-        }
-        
-+ Response 200 (application/json)
-
-        {
-            "status" : {
-                "code" : 200,
-                "message" : "Comment Updated"
-            },
-            "result" : {
-                "id" : "1chgfaur098",
-                "user_id" : "ger648fajgkaie",
-                "reply_id" : null,
-                "message" : "i want more videos",
-                "created_at" : "2019-08-24T22:28:16+07:00",
-                "updated_at" : "2019-08-24T22:28:16+07:00"
-            }   
-        }
-        
-### Delete Comment [POST /metadata/sub/delete]
-
-+ Request (application/json)
-
-        {
-            "id" : "1chgfaur098",
-            "metadata_id" : "cb92f773-c0a9-41dc-8cc9-9be9d680097c"
-        }
-        
-+ Response 200 (application/json)
-
-        {
-            "status" : {
-                "code" : 200,
-                "message" : "Comment Updated"
-            },
-            "result" : {
-                "id" : "1chgfaur098",
-                "user_id" : "ger648fajgkaie",
-                "reply_id" : null,
-                "message" : "i want more videos",
-                "created_at" : "2019-08-24T22:28:16+07:00",
-                "updated_at" : "2019-08-24T22:28:16+07:00"
-            }   
+                "message" : "delete success"
+            }
         }

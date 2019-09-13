@@ -37,7 +37,9 @@ class metavideoController extends Controller
     public function index($id)
     {
         $result = $this->get_videos($id);
-        return response()->json($result, 200);
+        return response()->json([
+            'metavideos' => $result
+        ]);
     }
 
     public function create(Request $request, $id)
@@ -99,7 +101,7 @@ class metavideoController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'id' => 'required',
+            'metadata_id' => 'required',
             'metavideo_id' => 'required'
         ];
 
@@ -109,7 +111,7 @@ class metavideoController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $videos = $this->get_videos($request->id);
+        $videos = $this->get_videos($request->metadata_id);
 
         $i = 0;
         $update = null;
@@ -137,7 +139,7 @@ class metavideoController extends Controller
         $format = (isset($request->format)) ? $request->format : $update['format'];
         $resolution = (isset($request->resolution)) ? $request->resolution : $update['resolution'];
 
-        $video = [
+        $video = array([
             'duration' => $duration,
             'file_path' => $file_path,
             'size' => $size,
@@ -147,9 +149,9 @@ class metavideoController extends Controller
             'created_at' => $update['created_at'],
             'id' => $update['id'],
             'resolution' => $resolution
-        ];
+        ]);
 
-        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->id", [
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
                 'metavideos' => array_merge($videos, $video)
             ]
@@ -165,8 +167,7 @@ class metavideoController extends Controller
             'status' => [
                 'code' => 200,
                 'message' => 'Update Success'
-            ],
-            'result' => $video
+            ]
         ], 200);
 
     }
@@ -174,7 +175,7 @@ class metavideoController extends Controller
     public function destroy(Request $request)
     {
         $rules = [
-            'id' => 'required',
+            'metadata_id' => 'required',
             'metavideo_id' => 'required'
         ];
 
@@ -184,7 +185,7 @@ class metavideoController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $videos = $this->get_videos($request->id);
+        $videos = $this->get_videos($request->metadata_id);
 
         $status = null;
         $i = 0;
@@ -205,7 +206,9 @@ class metavideoController extends Controller
             ]);
         }
 
-        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->id", [
+        $videos = array_merge([], $videos);
+
+        $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
                 'metavideos' => $videos
             ]
