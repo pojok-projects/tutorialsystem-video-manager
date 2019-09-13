@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => '/v1/metavideos'], function () use($router) {
+$router->group(['prefix' => '/vidm/v1/metavideos'], function () use($router) {
     $router->get('/{id}', 'metavideoController@index');
     $router->post('/store/{id}', 'metavideoController@create');
     $router->post('/update', 'metavideoController@update');
