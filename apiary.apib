@@ -1,0 +1,143 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Video Manager
+
+DOCS Video Manager Api
+
+##Api Version
+* /vidm/v1
+
+
+## Metadata Content [/metavideos]
+
+
+___
+**Table Routes:**
+| URL                                       | Method | INFO                            |
+| ----------------------------------------- | ------ | --------------------------------|
+| `/metavideos/{id}`                        | GET    | Get Videos By Metadata Id       |
+| `/metavideos/store/{id}`                  | POST   | Save Videos By Metadata Id      |
+| `/metavideos/update/`                     | POST   | Update Videos                   |
+| `/metavideos/delete`                      | POST   | Delete Videos                   |
+
+___
+**Save Videos Parameter:**
+| Parameter    | type   | Status   | Description           |
+| ------------ | ------ | -------- | --------------------- |
+| `file_name`  | string | required | File Name of Video    |
+| `file_path`  | string | required | File Path of Video    |
+| `format`     | string | required | Format of Video       |
+| `resolution` | string | required | Resolution of Video   |
+| `size`       | int    | required | Size of Video  [using bytes](https://convertlive.com/u/convert/megabytes/to/bytes#100) |
+| `duration`   | int    | required | Duration of Video [using seconds](https://convertlive.com/c/convert/time) |
+
+___
+**Update Videos Parameter:**
+| Parameter     | type   | Status   | Description           |
+| ------------  | ------ | -------- | --------------------- |
+| `metadata_id` | string | required | id of metadata        |
+| `metavideo_id`| string | required | id of video           |
+| `file_path`   | string | optimal  | File Path of Video    |
+| `format`      | string | optimal  | Format of Video       |
+| `resolution`  | string | optimal  | Resolution of Video   |
+| `size`        | int    | optimal  | Size of Video  [using bytes](https://convertlive.com/u/convert/megabytes/to/bytes#100) |
+| `duration`    | int    | optimal  | Duration of Video [using seconds](https://convertlive.com/c/convert/time) |
+
+___
+***Delete Videos Parameter:**
+| Parameter     | type   | Status   | Description           |
+| ------------  | ------ | -------- | --------------------- |
+| `metadata_id` | string | required | id of metadata        |
+| `metavideo_id`| string | required | id of video           |
+
+
+### Get Videos By metadata id [GET /metavideos/{id}]
+
++ Parameter
+    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
+    
++ Response 200 (application/json)
+
+        {
+            "metavideos": [
+                {
+                    "duration": 30,
+                    "file_path": "/videos/1080p/tutorial-node-js-bagian-1.mp4",
+                    "size": 104857600,
+                    "updated_at": "2019-08-24T22:28:16+07:00",
+                    "file_name": "tutorial-node-js-bagian-1.mp4",
+                    "format": "mp4",
+                    "created_at": "2019-08-24T22:28:16+07:00",
+                    "id": "cb92f773-c0a9-41dc-8cc9-9be9d680097c",
+                    "resolution": "1080p"
+                }
+            ]
+        }
+        
+### Save Videos By Metadata Id [POST /metavideos/store/{id}]
+
++ Parameter
+    + id: `56b140a1-16a7-4fbb-b852-7365fbff7112` (string, required) - Id of Content Metadata
+    
++ Request (application/json)
+
+        {
+            "file_name" : "Tutorial Node Js.mp4",
+            "duration" : 360,
+            "file_path" : "data/videos/Tutorial Node Js.mp4",
+            "size" : 3000000,
+            "format" : "mp4",
+            "resolution" : "1080p"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "status" : {
+                "code" : 200,
+                "message" : "upload Succes"
+            },
+            "result" : {
+                "video_id" : "fjalku84tui40t5439f"
+            }
+        }
+        
+### Update Videos [POST /metavideos/update]
+
++ Request (application/json)
+
+        {
+            "metadata_id" : "56b140a1-16a7-4fbb-b852-7365fbff7112",
+            "metavideos_id" : "jkefjiet904r45",
+            "file_name" : "Tutorial React Js.mp4",
+            "duration" : 360,
+            "file_path" : "data/videos/Tutorial React Js.mp4",
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "status" : {
+                "code" : 200,
+                "message" : "update success"
+            }
+        }
+        
+### Delete Videos [POST /metavideos/delete]
+
++ Request (application/json)
+
+        {
+            "metadata_id" : "56b140a1-16a7-4fbb-b852-7365fbff7112",
+            "metavideos_id" : "jkefjiet904r45"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "status" : {
+                "code" : 200,
+                "message" : "delete success"
+            }
+        }
