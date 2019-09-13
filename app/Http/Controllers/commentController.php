@@ -134,14 +134,14 @@ class commentController extends Controller
         
         $message = (isset($request->message)) ? $request->message : $update['message'];
         
-        $comment = [
+        $comment = array([
             'id' => $update['id'],
             'user_id' => $update['user_id'],
             'reply_id' => $update['reply_id'],
             'message' => $message,
             'created_at' => $update['created_at'],
             'updated_at' => date(DATE_ATOM)
-        ];
+        ]);
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
             'form_params' => [
@@ -210,7 +210,7 @@ class commentController extends Controller
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
             'form_params' => [
-                'comments' => $comments
+                'comments' => array_merge($comments, [])
             ]
         ]);
 

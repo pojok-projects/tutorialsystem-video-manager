@@ -67,6 +67,7 @@ class metadataController extends Controller
     {
         $rules = [
             'user_id' => 'required',
+            'category_id' => 'required',
             'video_title' => 'required',
             'video_description' => 'required',
             'video_genre' => 'required',
@@ -81,7 +82,7 @@ class metadataController extends Controller
         $result = $this->client->request('POST', $this->endpoint . '/content/metadata/store', [
             'form_params' => [
                 'user_id' => $request->user_id,
-                'category_id' => [],
+                'category_id' => $request->category_id,
                 'video_title' => $request->video_title,
                 'video_description' => $request->video_description,
                 'video_genre' => $request->video_genre,

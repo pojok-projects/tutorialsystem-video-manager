@@ -137,7 +137,7 @@ class metavideoController extends Controller
         $format = (isset($request->format)) ? $request->format : $update['format'];
         $resolution = (isset($request->resolution)) ? $request->resolution : $update['resolution'];
 
-        $video = [
+        $video = array([
             'duration' => $duration,
             'file_path' => $file_path,
             'size' => $size,
@@ -147,7 +147,7 @@ class metavideoController extends Controller
             'created_at' => $update['created_at'],
             'id' => $update['id'],
             'resolution' => $resolution
-        ];
+        ]);
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->id", [
             'form_params' => [
@@ -166,7 +166,7 @@ class metavideoController extends Controller
                 'code' => 200,
                 'message' => 'Update Success'
             ],
-            'result' => $video
+            'result' => array_merge($videos, $video)
         ], 200);
 
     }
@@ -204,6 +204,8 @@ class metavideoController extends Controller
                 ]
             ]);
         }
+
+        $videos = array_merge([], $videos);
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->id", [
             'form_params' => [

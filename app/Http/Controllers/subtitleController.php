@@ -132,17 +132,6 @@ class subtitleController extends Controller
         foreach($subtitle as $s) {
             if($s['id'] == $request->id) {
                 $update = $s;
-                if(isset($request->subtitle_category_id)) {
-                    if($s['subtitle_category_id'] == $request->subtitle_category_id) {
-                        return response()->json([
-                            'status' => [
-                                'code' => 409,
-                                'message' => 'subtitle with this subtitle_category_id is alrady exists!'
-                            ],
-                            'result' => $s
-                        ]);
-                    }
-                }
                 unset($subtitle[$i]);
             }
             $i++;
@@ -160,13 +149,13 @@ class subtitleController extends Controller
         $subtitle_category_id = (isset($request->subtitle_category_id)) ? $request->subtitle_category_id : $update['subtitle_category_id'];
         $file_path = (isset($request->file_path)) ? $request->file_path : $update['file_path'];
 
-        $sub = [
+        $sub = array([
             'id' => $update['id'],
             'subtitle_category_id' => $subtitle_category_id,
             'file_path' => $file_path,
             'created_at' => $update['created_at'],
             'updated_at' => date(DATE_ATOM)
-        ];
+        ]);
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
             'form_params' => [
@@ -185,7 +174,8 @@ class subtitleController extends Controller
                 'code' => 200,
                 'message' => 'Subtitle Updated!'
             ],
-            'result' => $sub
+            'result' => $sub,
+            'subtitles' => array_merge($subtitle, $sub)
         ]);
 
     }
@@ -226,14 +216,14 @@ class subtitleController extends Controller
             return response()->json([
                 'status' => [
                     'code' => 404,
-                    'message' => 'video not found'
+                    'message' => 'subtitle not found'
                 ]
             ]);
         }
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$request->metadata_id", [
             'form_params' => [
-                'subtitle' => $subtitle
+                'subtitle' => array_merge($subtitle, [])
             ]
         ]);
 

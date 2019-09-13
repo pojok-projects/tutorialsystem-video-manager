@@ -22,7 +22,20 @@ class reactController extends Controller
         $this->endpoint = env('ENDPOINT');
     }
 
-    public function like(Request $request, $id)
+    public function get($id, $attr)
+    {
+        $data = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
+        if($data->getStatusCode() != 200) {
+            return response()->json([
+                'Message' => 'Bad Gateway'
+            ], $data->getStatusCode());
+        }
+        $data = json_decode($data->getBody(), true)[$attr . 's'];
+        $data = (is_null($data)) ? [] : $data;
+        return $data;
+    }
+
+    public function res($request, $id, $attr)
     {
         
         $rules = [
@@ -35,22 +48,15 @@ class reactController extends Controller
 
         $this->validate($request, $rules, $message);
 
-        $likes = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
-        if($likes->getStatusCode() != 200) {
-            return response()->json([
-                'Message' => 'Bad Gateway'
-            ], $likes->getStatusCode());
-        }
-        $likes = json_decode($likes->getBody(), true)['likes'];
-        $likes = (is_null($likes['likes'])) ? [] : $likes['likes'];
+        $data = $this->get($id, $attr);
 
         $i = 0;
-        foreach($likes as $l) {
+        foreach($data as $l) {
             if($l['user_id'] == $request->user_id) {
-                unset($likes[$i]);
+                unset($data[$i]);
                 $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
                     'form_params' => [
-                        'likes' => $likes
+                        $attr . 's' => array_merge($data, [])
                     ]
                 ]);
                 if($result->getStatusCode() != 200) {
@@ -61,15 +67,15 @@ class reactController extends Controller
                 return response()->json([
                     'status' => [
                         'code' => 200,
-                        'message' => 'video unliked'
+                        'message' => 'video un' . $attr . 'd'
                     ],
-                    'result' => array_merge($likes, [])
+                    $attr . 's' => array_merge($data, [])
                 ]);
             }
             $i++;
         }
         $uuid = Str::uuid();
-        $like = array([
+        $action = array([
                     'id' => $uuid,
                     'user_id' => $request->user_id,
                     'created_at' => date(DATE_ATOM),
@@ -78,7 +84,7 @@ class reactController extends Controller
 
         $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
             'form_params' => [
-                'likes' => array_merge($likes, $like)
+                $attr . 's' => array_merge($data, $action)
             ]
         ]);
         if($result->getStatusCode() != 200) {
@@ -86,86 +92,44 @@ class reactController extends Controller
                 'Message' => 'Bad Gateway'
             ], $result->getStatusCode());
         }
+
+        $un = ($attr != 'like') ? 'like' : 'dislike';
+        $un_data = $this->get($id, $un);
+        $i = 0;
+        foreach($un_data as $u) {
+            if($u['user_id'] == $request->user_id) {
+                unset($un_data[$i]);
+                $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
+                    'form_params' => [
+                        $un . 's' => array_merge($un_data, [])
+                    ]
+                ]);
+                if($result->getStatusCode() != 200) {
+                    return response()->json([
+                        'Message' => 'Bad Gateway'
+                    ], $result->getStatusCode());
+                }
+            }
+            $i++;
+        }
+
         return response()->json([
             'status' => [
                 'code' => 200,
-                'message' => 'video liked'
+                'message' => 'video ' . $attr . 'd'
             ],
-            'result' => array_merge($likes, $like)
+            $attr . 's' => array_merge($data, $action)
         ]);
     }
 
+    public function like(Request $request, $id)
+    {
+        return $this->res($request, $id, 'like');
+    }
 
     public function dislike(Request $request, $id)
     {  
-        $rules = [
-            'user_id' => 'required'
-        ];
-
-        $message = [
-            'required' => 'Please fill attribute :attribute'
-        ];
-
-        $this->validate($request, $rules, $message);
-
-        $dislikes = $this->client->request('GET', $this->endpoint . "/content/metadata/$id");
-        if($dislikes->getStatusCode() != 200) {
-            return response()->json([
-                'Message' => 'Bad Gateway'
-            ], $dislikes->getStatusCode());
-        }
-        $dislikes = json_decode($dislikes->getBody(), true)['dislikes'];
-        $dislikes = (is_null($dislikes['dislikes'])) ? [] : $dislikes['dislikes'];
-
-        $i = 0;
-        foreach($dislikes as $l) {
-            if($l['user_id'] == $request->user_id) {
-                unset($dislikes[$i]);
-                $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
-                    'form_params' => [
-                        'dislikes' => array_merge($dislikes, [])
-                    ]
-                ]);
-                if($result->getStatusCode() != 200) {
-                    return response()->json([
-                        'Message' => 'Bad Gateway'
-                    ], $result->getStatusCode());
-                }
-                return response()->json([
-                    'status' => [
-                        'code' => 200,
-                        'message' => 'video undisliked'
-                    ],
-                    'result' => array_merge($dislikes, [])
-                ]);
-            }
-            $i++;
-        }
-        $uuid = Str::uuid();
-        $dislike = array([
-                    'id' => $uuid,
-                    'user_id' => $request->user_id,
-                    'created_at' => date(DATE_ATOM),
-                    'updated_at' => date(DATE_ATOM)
-                ]);
-
-        $result = $this->client->request('POST', $this->endpoint . "/content/metadata/update/$id", [
-            'form_params' => [
-                'dislikes' => array_merge($dislikes, $dislike)
-            ]
-        ]);
-        if($result->getStatusCode() != 200) {
-            return response()->json([
-                'Message' => 'Bad Gateway'
-            ], $result->getStatusCode());
-        }
-        return response()->json([
-            'status' => [
-                'code' => 200,
-                'message' => 'video disliked'
-            ],
-            'result' => array_merge($dislikes, $dislike)
-        ]);
+        return $this->res($request, $id, 'dislike');
     }
 
     //
