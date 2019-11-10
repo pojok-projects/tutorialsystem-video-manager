@@ -113,23 +113,18 @@ class metavideoController extends Controller
 
         $videos = $this->get_videos($request->metadata_id);
 
-        $i = 0;
-        $update = null;
-        foreach($videos as $s) {
-            if($s['id'] == $request->metavideo_id) {
-                $update = $s;
-                unset($videos[$i]);
-            }
-            $i++;
-        }
+        $key = array_search($request->metavideo_id, array_column($videos, 'id'));
 
-        if(is_null($update)) {
+        if($key === false) {
             return response()->json([
                 'status' => [
                     'code' => 404,
                     'message' => 'video not found'
                 ]
-                ], 404);
+            ]);
+        } else {
+            $update = $videos[$key];
+            unset($videos[$key]);
         }
         
         $file_path = (isset($request->file_path)) ? $request->file_path : $update['file_path'];
@@ -151,9 +146,10 @@ class metavideoController extends Controller
             'resolution' => $resolution
         ]);
 
+        $result = array_merge($videos, $video);
         $result = $this->client->request('POST', $this->endpoint . "content/metadata/update/$request->metadata_id", [
             'form_params' => [
-                'metavideos' => array_merge($videos, $video)
+                'metavideos' => $result
             ]
         ]);
 
@@ -187,23 +183,17 @@ class metavideoController extends Controller
 
         $videos = $this->get_videos($request->metadata_id);
 
-        $status = null;
-        $i = 0;
-        foreach($videos as $s) {
-            if($s['id'] == $request->metavideo_id) {
-                unset($videos[$i]);
-                $status = 1;
-            }
-            $i++;
-        }
+        $key = array_search($request->metavideo_id, array_column($videos, 'id'));
 
-        if(is_null($status)) {
+        if($key === false) {
             return response()->json([
                 'status' => [
                     'code' => 404,
                     'message' => 'video not found'
                 ]
             ]);
+        } else {
+            unset($videos[$key]);
         }
 
         $videos = array_merge([], $videos);
