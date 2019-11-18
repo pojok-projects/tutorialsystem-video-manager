@@ -31,6 +31,7 @@ class metavideoController extends Controller
         }
 
         $data = json_decode($result->getBody(), true)['metavideos'];
+        $data = (is_null($data)) ? [] : $data;
         return $data;
     }
 
