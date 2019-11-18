@@ -18,7 +18,7 @@ class metavideoController extends Controller
     public function __construct()
     {
         $this->client = new Client();
-        $this->endpoint = env('ENDPOINT');
+        $this->endpoint = "https://api.tutorialinaja.tech/dbil/v1/";
     }
 
     private function get_videos($id) {
@@ -31,6 +31,7 @@ class metavideoController extends Controller
         }
 
         $data = json_decode($result->getBody(), true)['metavideos'];
+        $data = (is_null($data)) ? [] : $data;
         return $data;
     }
 
